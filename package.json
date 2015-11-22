@@ -1,0 +1,41 @@
+{
+  "name": "starter-node-angular",
+  "name": "mlearnslack",
+  "description": "mLearnSlack - Slack Bot desinged for mLearning.",
+  "version": "1.0.0",
+  "private": false,
+  "author": "Juanjo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juanjmerono/mlearnslack"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node node_modules/grunt-cli/bin/grunt openshift",
+    "test": "node node_modules/grunt-cli/bin/grunt test"
+  },
+  "dependencies": {
+    "express" : "~4.5.1",
+	"mongoose" : "~3.8.0",
+	"body-parser" : "~1.4.2",
+	"method-override" : "~2.0.2",
+    "grunt-cli": "0.1.11",
+    "grunt-concurrent": "1.0.0",
+    "grunt-env": "0.4.0",
+    "grunt-nodemon": "0.3.0",
+    "grunt-shell": "1.1.1"	
+  },
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "latest",
+    "jshint-stylish": "latest",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-watch": "latest"
+  }  
+}
