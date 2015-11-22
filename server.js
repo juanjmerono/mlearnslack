@@ -7,8 +7,9 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var http 		   = require('http');
 var server 		   = http.createServer(app);
-var log4js 		   = require('./log.js');
-var logger 		   = log4js.getLog('server');
+var logger 		   = require('./log.js').getLog('server');
+var MyLearnBot	   = require('./app/slackbot');
+var fs 			   = require('fs');
 
 // configuration ===========================================
 	
@@ -35,4 +36,15 @@ require('./app/routes')(app); // pass our application into our routes
 server.listen(port, ipaddr);
 
 logger.info('Server listening on port ' + port); 			// shoutout to the user
+
+fs.readFile('./.slacktoken', 'utf8', function (err, data) {
+	var slacktoken = err ? null : data;
+	if (process.env.SLACK_TOKEN || slacktoken) {
+		var bot = new MyLearnBot(process.env.SLACK_TOKEN || slacktoken);
+		logger.info('MLearnSlackBot Launched !!');
+	} else {
+		logger.error('SlackToken unavailable, please add one to use mLearnSlack');
+	}
+});
+
 exports = module.exports = app; 						// expose app
