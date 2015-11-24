@@ -30,7 +30,8 @@
     "log4js": "^0.6.21",
     "method-override": "~2.0.2",
     "mongoose": "~3.8.0",
-    "slackbots": "^0.4.0"
+    "slackbots": "^0.4.0",
+    "request": "2.34.0"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

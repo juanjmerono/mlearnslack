@@ -41,6 +41,7 @@ fs.readFile('./.slacktoken', 'utf8', function (err, data) {
 	var slacktoken = err ? null : data;
 	if (process.env.SLACK_TOKEN || slacktoken) {
 		var bot = new MyLearnBot(process.env.SLACK_TOKEN || slacktoken);
+		app.bot = bot;
 		logger.info('MLearnSlackBot Launched !!');
 	} else {
 		logger.error('SlackToken unavailable, please add one to use mLearnSlack');
