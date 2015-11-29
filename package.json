@@ -31,7 +31,12 @@
     "method-override": "~2.0.2",
     "mongoose": "~3.8.0",
     "slackbots": "^0.4.0",
-    "request": "2.34.0"
+    "request": "2.34.0",
+    "bluebird": "^2.9.3",
+    "error-factory": "^0.1.4",
+    "lodash": "^3.0.0",
+    "superagent": "^0.21.0",
+    "extend": "^2.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

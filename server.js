@@ -35,17 +35,66 @@ require('./app/routes')(app); // pass our application into our routes
 //app.listen(port);
 server.listen(port, ipaddr);
 
-logger.info('Server listening on port ' + port); 			// shoutout to the user
+logger.info('Server listening on port ' + port); 	// shoutout to the user
 
-fs.readFile('./.slacktoken', 'utf8', function (err, data) {
-	var slacktoken = err ? null : data;
-	if (process.env.SLACK_TOKEN || slacktoken) {
-		var bot = new MyLearnBot(process.env.SLACK_TOKEN || slacktoken);
-		app.bot = bot;
-		logger.info('MLearnSlackBot Launched !!');
+app.credly = {};
+
+fs.readFile('./.slackapitoken', 'utf8', function (err, data) {
+	var slackapitoken = err ? null : data;
+	if (process.env.SLACK_API_TOKEN || slackapitoken) {
+		app.slack = { api : require('./app/slackapi'),
+					  apitoken : process.env.SLACK_API_TOKEN || slackapitoken };
 	} else {
-		logger.error('SlackToken unavailable, please add one to use mLearnSlack');
+		logger.error('SlackApiToken unavailable, please add one to use mLearnSlack');
 	}
+	fs.readFile('./.slashtokens', 'utf8', function (err, data) {
+		var slashtokens = err ? null : data;
+		if (process.env.SLASH_TOKENS || slashtokens) {
+			app.slack.slashtokens = (process.env.SLASH_TOKENS || slashtokens).split(',');
+		} else {
+			logger.error('SlashTokens unavailable, please add one to use mLearnSlack Slash Commands');
+		}
+		fs.readFile('./.slacktoken', 'utf8', function (err, data) {
+			var slacktoken = err ? null : data;
+			if (process.env.SLACK_TOKEN || slacktoken) {
+				var bot = new MyLearnBot(app.slack, app.credly, process.env.SLACK_TOKEN || slacktoken, process.env.SLACK_BOT_NAME || 'emusbot');
+				app.bot = bot;
+				logger.info('MLearnSlackBot Launched !!');
+			} else {
+				logger.error('SlackToken unavailable, please add one to use mLearnSlack');
+			}
+		});
+	});
 });
 
-exports = module.exports = app; 						// expose app
+fs.readFile('./.credlyapitoken', 'utf8', function (err, data) {
+	var credlyapitoken = err ? null : data;
+	if (process.env.CREDLY_API_TOKEN || credlyapitoken) {
+		app.credly.api = require('./app/credlyapi');
+		app.credly.apitoken = process.env.CREDLY_API_TOKEN || credlyapitoken;
+	} else {
+		logger.error('CredlyApiToken unavailable, please add one to use mLearnSlack');
+	}
+	fs.readFile('./.credlyapisecret', 'utf8', function (err, data) {
+		var credlyapisecret = err ? null : data;
+		if (process.env.CREDLY_API_SECRET || credlyapisecret) {
+			app.credly.apisecret = (process.env.CREDLY_API_SECRET || credlyapisecret).split(',');
+		} else {
+			logger.error('CredlyApiSecret unavailable, please add one to use mLearnSlack');
+		}
+		fs.readFile('./.credlyapiuser', 'utf8', function (err, data) {
+			var credlyapiuser = err ? null : data;
+			if (process.env.CREDLY_API_USER || credlyapiuser) {
+				// Reload badges every hour !!
+				app.credly.apiuser = process.env.CREDLY_API_USER || credlyapiuser;
+				app.credly.apiyear = process.env.CREDLY_API_YEAR || '2015';
+				app.credly.api.badges(app.credly, app.credly.apiuser, app.credly.apiyear);
+			} else {
+				logger.error('CredlyApiUser unavailable, please add one to use mLearnSlack');
+			}
+		});
+	});
+});
+
+
+exports = module.exports = app; // expose app
