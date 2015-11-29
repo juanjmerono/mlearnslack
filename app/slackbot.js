@@ -113,8 +113,8 @@ function MyLearnBot(slack,credly,bot_token,botname) {
 		return null;
 	};
 	this.isValidToken = function(tk) {
-		for (var k=0; k<self.bot.slackslashtokens.length; k+=1) {
-			if (self.bot.slackslashtokens[k] === tk) { return true; }
+		for (var k=0; k<self.slackslashtokens.length; k+=1) {
+			if (self.slackslashtokens[k] === tk) { return true; }
 		}
 		return false;
 	};
